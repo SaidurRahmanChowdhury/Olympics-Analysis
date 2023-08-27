@@ -1,5 +1,37 @@
 import numpy as np
 
+def fetch_medal_tally(df,year,country):
+    
+    medal_df=df.drop_duplicates(subset=['Team','NOC','Games','Year','City','Sport','Event','Medal'])
+    
+    flag=0
+    if year == 'Overall' and country == 'Overall':
+        temp_df=medal_df
+    
+    if year == 'Overall' and country != 'Overall':
+        flag=1
+        temp_df=medal_df[medal_df['region'] == country]
+    
+    if year != 'Overall' and country == 'Overall':
+        temp_df=medal_df[medal_df['Year'] == int(year)]
+    
+    if year!= 'Overall'  and country != 'Overall':
+        temp_df=medal_df[(medal_df['region'] == country) & (medal_df['Year'] == int(year))]
+     
+    if flag ==1:
+          x=temp_df.groupby('Year').sum()[['Gold','Silver','Bronze']].sort_values('Year').reset_index()
+    else:
+        x=temp_df.groupby('region').sum()[['Gold','Silver','Bronze']].sort_values('Gold',ascending=False).reset_index()
+        
+    x['total']=x['Gold'] + x['Silver'] + x['Bronze']
+    
+    x['Gold']=x['Gold'].astype('int')
+    x['Silver']=x['Silver'].astype('int')
+    x['Bronze']=x['Bronze'].astype('int')
+    x['total']=x['total'].astype('int')
+    
+    return x
+
 def medal_tally(df):
     medal_tally=df.drop_duplicates(subset=['Team','NOC','Games','Year','City','Sport','Event','Medal'])
     medal_tally=medal_tally.groupby('region').sum()[['Gold','Silver','Bronze']].sort_values('Gold',ascending=False).reset_index()
@@ -23,3 +55,5 @@ def country_year_list(df):
      country.insert(0,'Overall')
      
      return years,country
+ 
+    
