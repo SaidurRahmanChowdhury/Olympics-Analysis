@@ -3,7 +3,10 @@ import pandas as pd
 import preprocessor,helper
 
 
-df=preprocessor.preprocess()
+df = pd.read_csv('athlete_events.csv')
+region_df = pd.read_csv('noc_regions.csv')
+
+df=preprocessor.preprocess(df,region_df)
 
 # Define a radio button in the sidebar
 user_menu=st.sidebar.radio(
