@@ -42,3 +42,17 @@ if user_menu == 'Medal Tally':
         st.title(f"{selected_country}'s Overall Perfomance in {selected_year}")
     
     st.dataframe(medal_tally)
+    
+if user_menu == "Overall Analysis":
+    
+    editions=df['Year'].nunique()-1
+    cities=df['City'].nunique()
+    sports=df['Sport'].nunique()
+    events=df['Event'].nunique()
+    athletes=df['Name'].nunique()
+    nations=df['region'].nunique()
+    
+    col1,col2,col3=st.columns(3)
+    with col1:
+        st.header("Editions")
+        st.title(editions) 
