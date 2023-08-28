@@ -55,5 +55,13 @@ def country_year_list(df):
      country.insert(0,'Overall')
      
      return years,country
+
+
+def participating_nations_over_time(df):
+    
+    nations_over_time=df.drop_duplicates(['Year','region'])['Year'].value_counts().reset_index().sort_values(by='Year')
+    nations_over_time.rename(columns={'Year':'Edition','count':'No of Countries'},inplace=True)
+    
+    return nations_over_time
  
     

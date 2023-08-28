@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import preprocessor, helper
+import plotly.express as px
 
 # Set page title and icon
 st.set_page_config(
@@ -44,15 +45,47 @@ if user_menu == 'Medal Tally':
     st.dataframe(medal_tally)
     
 if user_menu == "Overall Analysis":
-    
-    editions=df['Year'].nunique()-1
-    cities=df['City'].nunique()
-    sports=df['Sport'].nunique()
-    events=df['Event'].nunique()
-    athletes=df['Name'].nunique()
-    nations=df['region'].nunique()
-    
-    col1,col2,col3=st.columns(3)
-    with col1:
-        st.header("Editions")
-        st.title(editions) 
+        
+        editions=df['Year'].nunique()-1
+        cities=df['City'].nunique()
+        sports=df['Sport'].nunique()
+        events=df['Event'].nunique()
+        athletes=df['Name'].nunique()
+        nations=df['region'].nunique()
+        
+        # Center-align the title "Top Statistics"
+        st.markdown("<h1 style='text-align: center;'>Top Statistics</h1>", unsafe_allow_html=True)
+        
+        col1,col2,col3=st.columns(3)
+        
+        with col1:
+            st.header("Editions")
+            st.title(editions) 
+            
+        with col2:
+            st.header("Hosts")
+            st.title(cities) 
+            
+        with col3:
+            st.header("Sports")
+            st.title(sports) 
+            
+        col1,col2,col3=st.columns(3)
+        
+        with col1:
+            st.header("Events")
+            st.title(events) 
+            
+        with col2:
+            st.header("Athletes")
+            st.title(athletes) 
+            
+        with col3:
+            st.header("Nations")
+            st.title(nations) 
+        
+        
+        nations_over_time=helper.participating_nations_over_time(df)
+        fig=px.line(nations_over_time,x='Edition',y='No of Countries')
+        st.title("Participating Nations Over The Years:")
+        st.plotly_chart(fig)
