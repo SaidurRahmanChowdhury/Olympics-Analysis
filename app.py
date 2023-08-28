@@ -85,7 +85,18 @@ if user_menu == "Overall Analysis":
             st.title(nations) 
         
         
-        nations_over_time=helper.participating_nations_over_time(df)
-        fig=px.line(nations_over_time,x='Edition',y='No of Countries')
+        nations_over_time=helper.data_over_time(df,'region')
+        fig=px.line(nations_over_time,x='Number of Years',y='region')
         st.title("Participating Nations Over The Years:")
+        st.plotly_chart(fig)
+        
+        
+        events_over_time=helper.data_over_time(df,'Event')
+        fig=px.line(events_over_time,x='Number of Years',y='Event')
+        st.title("Events Over The Years:")
+        st.plotly_chart(fig)
+        
+        athletes_over_time=helper.data_over_time(df,'Name')
+        fig=px.line(athletes_over_time,x='Number of Years',y='Name')
+        st.title("Athletes Over The Years:")
         st.plotly_chart(fig)
