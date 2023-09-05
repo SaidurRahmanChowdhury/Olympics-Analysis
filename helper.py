@@ -63,5 +63,21 @@ def data_over_time(df,col):
     over_time.rename(columns={'Year':'Number of Years','count':col},inplace=True)
     
     return over_time
+
+
+def most_successful(df,sport):
+    temp_df=df.dropna(subset=['Medal'])
+    
+    if sport !='Overall':
+        temp_df=temp_df[temp_df['Sport'] == sport]
+        
+     # Rename the index column to 'Name_Count'
+    result_df = temp_df['Name'].value_counts().reset_index().head(15)
+    result_df.rename(columns={'Name': 'index', 'index': 'Name'}, inplace=True)
+    
+     # Merge the result with the original DataFrame
+    x= result_df.merge(df, left_on='index', right_on='Name', how='left')[['index','count','Sport','region']].drop_duplicates('index')
+    x.rename(columns={'index':'Name','count':'Medals'},inplace=True)
+    return x
  
     
