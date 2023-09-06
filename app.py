@@ -151,7 +151,7 @@ if user_menu == 'Country-wise Analysis':
     st.header(selected_region + " Medal Tally Over The Years:")
     st.plotly_chart(fig)
     
-    st.title(selected_region + ' excels in the following sports')
+    st.title(selected_region + ' excels in the following sports:')
     pt=helper.country_event_heatmap(df,selected_region)
     
     fig,ax=plt.subplots(figsize=(20, 20))
