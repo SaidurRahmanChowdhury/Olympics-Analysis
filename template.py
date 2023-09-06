@@ -7,8 +7,6 @@ logging.basicConfig(level=logging.INFO)
 project_name="Olympics Analysis"
 
 list_of_files=[
-    f"source/{project_name}/__init__.py",
-    f"source/{project_name}/notebook/__init__.py",
     "app.py",
     "helper.py",
     "preprocessor.py",
