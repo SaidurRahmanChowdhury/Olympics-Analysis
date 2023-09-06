@@ -89,22 +89,22 @@ if user_menu == "Overall Analysis":
         
         nations_over_time=helper.data_over_time(df,'region')
         fig=px.line(nations_over_time,x='Number of Years',y='region')
-        st.title("Participating Nations Over The Years:")
+        st.header("Participating Nations Over The Years:")
         st.plotly_chart(fig)
         
         
         events_over_time=helper.data_over_time(df,'Event')
         fig=px.line(events_over_time,x='Number of Years',y='Event')
-        st.title("Events Over The Years:")
+        st.header("Events Over The Years:")
         st.plotly_chart(fig)
         
         athletes_over_time=helper.data_over_time(df,'Name')
         fig=px.line(athletes_over_time,x='Number of Years',y='Name')
-        st.title("Athletes Over The Years:")
+        st.header("Athletes Over The Years:")
         st.plotly_chart(fig)
         
         
-        st.title("Number of Events Over Time:")
+        st.header("Number of Events Over Time:")
         # Create a larger figure size
         fig,ax=plt.subplots(figsize=(20, 20))
 
@@ -127,7 +127,7 @@ if user_menu == "Overall Analysis":
         st.pyplot(fig)
         
         
-        st.title('Top 15 Successful Atheletes:')
+        st.header('Top 15 Successful Atheletes:')
         
         sports_list=df['Sport'].unique().tolist()
         sports_list.sort()
@@ -136,3 +136,17 @@ if user_menu == "Overall Analysis":
         x=helper.most_successful(df,selected_sports)
         
         st.table(x)
+
+if user_menu == 'Country-wise Analysis':
+    
+    st.title('Country Wise Analysis:')
+    
+    region_list=df['region'].dropna().unique().tolist()
+    region_list.sort()
+    
+    selected_region=st.selectbox('Select a Region:',region_list)
+    
+    country_df=helper.yearwise_medal_tally(df,selected_region)
+    fig=px.line(country_df,x='Year',y='Medal')
+    st.header(selected_region + " Medal Tally Over The Years:")
+    st.plotly_chart(fig)
