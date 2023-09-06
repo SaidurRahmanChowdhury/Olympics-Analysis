@@ -139,14 +139,43 @@ if user_menu == "Overall Analysis":
 
 if user_menu == 'Country-wise Analysis':
     
-    st.title('Country Wise Analysis:')
+    st.sidebar.title('Country Wise Analysis:')
     
     region_list=df['region'].dropna().unique().tolist()
     region_list.sort()
     
-    selected_region=st.selectbox('Select a Region:',region_list)
+    selected_region=st.sidebar.selectbox('Select a Region:',region_list)
     
     country_df=helper.yearwise_medal_tally(df,selected_region)
     fig=px.line(country_df,x='Year',y='Medal')
     st.header(selected_region + " Medal Tally Over The Years:")
     st.plotly_chart(fig)
+    
+    st.title(selected_region + ' excels in the following sports')
+    pt=helper.country_event_heatmap(df,selected_region)
+    
+    fig,ax=plt.subplots(figsize=(20, 20))
+
+    if not pt.empty:
+        
+        ax = sns.heatmap(pt, annot=True)
+        st.pyplot(fig)
+        
+    else:
+        
+        # Display an attractive centered warning message when pt is empty
+        st.markdown(
+            """
+            <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+                <div style="background-color: #ffe6e6; padding: 20px; border-radius: 5px; text-align: center;">
+                    <p style="color: #ff0000; font-size: 18px; font-weight: bold;">
+                        This team hasn't won any Olympics medals.
+                    </p>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    
+   
