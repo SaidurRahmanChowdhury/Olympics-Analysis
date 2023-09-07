@@ -125,3 +125,18 @@ def weight_vs_height(df,sport):
     
     else:
         return athelete_df
+    
+    
+def men_vs_women(df):
+    athelete_df=df.drop_duplicates(subset=['Name','region'])
+    
+    men=athelete_df[athelete_df['Sex']=='M'].groupby('Year').count()['Name'].reset_index()
+    women=athelete_df[athelete_df['Sex']=='F'].groupby('Year').count()['Name'].reset_index()
+    
+    final=men.merge(women,on='Year',how='left')
+    final.fillna(0,inplace=True)
+    final.rename(columns={'Name_x':'Male','Name_y':'Female'},inplace=True)
+    
+    return final
+    
+    

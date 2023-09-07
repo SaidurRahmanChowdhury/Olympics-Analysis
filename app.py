@@ -21,6 +21,8 @@ region_df = pd.read_csv('noc_regions.csv')
 df = preprocessor.preprocess(df, region_df)
 
 st.sidebar.title("Olympics Analysis")
+
+st.sidebar.image('https://cdn.pixabay.com/photo/2016/07/22/16/39/olympia-1535219_1280.jpg')
 # Define radio buttons as styled options
 user_menu = st.sidebar.radio(
     'Select an Option',
@@ -67,7 +69,7 @@ if user_menu == "Overall Analysis":
             st.title(editions) 
             
         with col2:
-            st.header("Hosts")
+            st.header("Cities")
             st.title(cities) 
             
         with col3:
@@ -278,7 +280,7 @@ if user_menu == 'Athlete wise Analysis':
     st.title('Distribution of Age of Silver Medalist:')
     st.plotly_chart(fig1)
     
-    
+    st.title('Height Vs Weight:')
     sports_list=df['Sport'].unique().tolist()
     sports_list.sort()
     sports_list.insert(0,'Overall')
@@ -287,5 +289,12 @@ if user_menu == 'Athlete wise Analysis':
     fig,ax=plt.subplots(figsize=(20, 20))
     
     ax=sns.scatterplot(y=temp_df['Height'],x=temp_df['Weight'],hue=temp_df['Medal'],style=temp_df['Sex'],s=100)
-    st.title('Height Vs Weight:')
     st.pyplot(fig)
+    
+    
+    st.title('Men Vs Women Perticipation Over The Years:')
+    final=helper.men_vs_women(df)
+    fig=px.line(final,x='Year',y=['Male','Female'])
+
+    st.plotly_chart(fig)
+    
