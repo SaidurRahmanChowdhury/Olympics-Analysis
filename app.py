@@ -3,7 +3,9 @@ import pandas as pd
 import preprocessor, helper
 import plotly.express as px
 import matplotlib.pyplot as plt
+import plotly.figure_factory as ff
 import seaborn as sns
+import scipy
 
 # Set page title and icon
 st.set_page_config(
@@ -176,6 +178,102 @@ if user_menu == 'Country-wise Analysis':
             """,
             unsafe_allow_html=True
         )
+        
+    
+    st.title('Top 10 Successful Atheletes in ' +selected_region +':')
+    coutrywise_atheletes=helper.most_successful_countrywise(df,selected_region)  
+    st.table(coutrywise_atheletes)
+    
 
     
-   
+
+if user_menu == 'Athlete wise Analysis':
+    
+    # Create a dataframe without duplicate rows based on 'Name' and 'region' columns
+    athlete_df = df.drop_duplicates(subset=['Name', 'region'])
+
+    # Filter and clean data for age of athletes with medals
+    overall_age = athlete_df['Age'].dropna()
+    gold_age = athlete_df[athlete_df['Medal'] == 'Gold']['Age'].dropna()
+    silver_age = athlete_df[athlete_df['Medal'] == 'Silver']['Age'].dropna()
+    bronze_age = athlete_df[athlete_df['Medal'] == 'Bronze']['Age'].dropna()
+
+    # Create a distribution plot
+    fig = ff.create_distplot(
+        [overall_age, gold_age, silver_age, bronze_age],
+        ['Overall', 'Gold Medalist', 'Silver Medalist', 'Bronze Medalist'],
+        colors=['#3498db', '#f1c40f', '#95a5a6', '#e74c3c'],  # Custom colors for each curve
+        show_hist=False,  # Hide histograms
+        show_rug=False,   # Hide rug plots
+    )
+
+    # Customize the layout
+    fig.update_layout(
+        title="Age Distribution of Athletes by Medal",
+        xaxis_title="Age",
+        yaxis_title="Density",
+        legend=dict(x=0.75, y=0.95),  # Adjust legend position
+        font=dict(family="Arial", size=12),
+        plot_bgcolor='#ecf0f1',  # Background color,
+        autosize=False,
+        width=1000,
+        height=600
+    )
+    st.title('Distribution of Age:')
+    # Show the updated figure
+    st.plotly_chart(fig)
+    
+    x=[]
+    name=[]
+    famous_sports=['Basketball','Judo','Football','Tug-Of-War','Athletics','Swimming','Badminton','Sailing','Gymnastics',
+               'Art Competitions','Handball','Weightlifting','Wrestling','Water Polo','Hockey','Rowing','Fencing','Shooting',
+               'Boxing','Taekwondo','Cycling','Diving','Canoeing','Tennis',
+               'Golf','Softball','Archery','Volleyball','Synchronized Swimming','Table Tennis','Baseball',
+               'Rhythmic Gymnastics','Rugby Sevens','Beach Volleyball','Triathlon','Rugby','Polo',
+               'Ice Hockey']
+    for sport in famous_sports:
+        temp_df=athlete_df[athlete_df['Sport']==sport]
+        x.append(temp_df[temp_df['Medal']=='Gold']['Age'].dropna())
+        name.append(sport)
+        
+    fig=ff.create_distplot(x,name,show_hist=False,show_rug=False)
+    # Customize the layout
+    fig.update_layout(
+            title="Age Distribution of Gold Medalists in Famous Sports",
+            xaxis_title="Age",
+            yaxis_title="Density",
+            autosize=False,
+            width=1000,
+            height=600
+        )
+    st.title('Distribution of Age of Gold Medalist:')
+    st.plotly_chart(fig)
+    
+    
+    
+    y=[]
+    name1=[]
+    famous_sports1=['Basketball','Judo','Football','Tug-Of-War','Athletics','Swimming','Badminton','Sailing','Gymnastics',
+               'Art Competitions','Handball','Weightlifting','Wrestling','Water Polo','Hockey','Rowing','Fencing','Shooting',
+               'Boxing','Taekwondo','Cycling','Diving','Canoeing','Tennis',
+               'Golf','Softball','Archery','Volleyball','Synchronized Swimming','Table Tennis','Baseball',
+               'Rhythmic Gymnastics','Rugby Sevens','Beach Volleyball','Triathlon','Rugby','Polo',
+               'Ice Hockey']
+    
+    for sport1 in famous_sports1:
+        temp_df1=athlete_df[athlete_df['Sport']==sport1]
+        y.append(temp_df1[temp_df1['Medal']=='Silver']['Age'].dropna())
+        name1.append(sport1)
+        
+    fig1=ff.create_distplot(y,name1,show_hist=False,show_rug=False)
+    # Customize the layout
+    fig.update_layout(
+            title="Age Distribution of Silver Medalists in Famous Sports",
+            xaxis_title="Age",
+            yaxis_title="Density",
+            autosize=False,
+            width=1000,
+            height=600
+        )
+    st.title('Distribution of Age of Silver Medalist:')
+    st.plotly_chart(fig1)
