@@ -277,3 +277,15 @@ if user_menu == 'Athlete wise Analysis':
         )
     st.title('Distribution of Age of Silver Medalist:')
     st.plotly_chart(fig1)
+    
+    
+    sports_list=df['Sport'].unique().tolist()
+    sports_list.sort()
+    sports_list.insert(0,'Overall')
+    selected_sports=st.selectbox('Select a sport:',sports_list)
+    temp_df=helper.weight_vs_height(df,selected_sports)
+    fig,ax=plt.subplots(figsize=(20, 20))
+    
+    ax=sns.scatterplot(y=temp_df['Height'],x=temp_df['Weight'],hue=temp_df['Medal'],style=temp_df['Sex'],s=100)
+    st.title('Height Vs Weight:')
+    st.pyplot(fig)
